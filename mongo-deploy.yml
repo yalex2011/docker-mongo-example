@@ -1,0 +1,96 @@
+version: '3'
+
+services:
+  mongodb1:
+    image: mongo:3.6
+    volumes:
+      - mongodata1:/data/db
+      - mongoconfig1:/data/configdb
+      # - type: volume
+      #   source: mongodata1
+      #   target: /data/db
+      # - type: volume
+      #   source: mongoconfig1
+      #   target: /data/configdb
+    networks:
+      - mongonet
+    # deploy:
+    #   placement:
+    #     constraints:
+    #       - "labels.mongo.replica == 1"
+    command: mongod --replSet example
+    labels:
+      com.docker.swarm.service.name: mongodb1
+
+  mongodb2:
+    image: mongo:3.6
+    volumes:
+      - mongodata2:/data/db
+      - mongoconfig2:/data/configdb
+      # - type: volume
+      #   source: mongodata2
+      #   target: /data/db
+      # - type: volume
+      #   source:mongoconfig2
+      #   target: /data/configdb
+    networks:
+      - mongonet
+    # deploy:
+    #   placement:
+    #     constraints:
+    #       - "labels.mongo.replica == 2"
+    command: mongod --replSet example
+    labels:
+      com.docker.swarm.service.name: mongodb2
+
+  mongodb3:
+    image: mongo:3.6
+    volumes:
+      - mongodata3:/data/db
+      - mongoconfig3:/data/configdb
+      # - type: volume
+      #   source: mongodata3
+      #   target: /data/db
+      # - type: volume
+      #   source: mongoconfig3
+      #   target: /data/configdb
+    networks:
+      - mongonet
+    # deploy:
+    #   placement:
+    #     constraints:
+    #       - "labels.mongo.replica == 3"
+    command: mongod --replSet example
+    labels:
+      com.docker.swarm.service.name: mongodb3
+
+  koalab:
+    image: kalahari/koalab
+    environment:
+      - MONGO_URL=mongodb://mongo_mongodb1:27017,mongo_mongodb2:27017,mongo_mongodb3:27017/koalab?replicaSet=example
+    ports:
+      - "8080:8080"
+    networks:
+      - mongonet
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+
+# docker service create --env 'MONGO_URL=mongodb://mongo_mongodb1:27017,mongo_mongodb2:27017,mongo_mongodb3:27017/koalab?replicaSet=example' --name koalab --network mongonet --replicas 2 --publish 8080:8080 kalahari/koalab
+
+networks:
+  mongonet: {}
+
+volumes:
+  mongodata1:
+  mongoconfig1:
+  mongodata2:
+  mongoconfig2:
+  mongodata3:
+  mongoconfig3:
