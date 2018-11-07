@@ -84,6 +84,20 @@ services:
 
 # docker service create --env 'MONGO_URL=mongodb://mongo_mongodb1:27017,mongo_mongodb2:27017,mongo_mongodb3:27017/koalab?replicaSet=example' --name koalab --network mongonet --replicas 2 --publish 8080:8080 kalahari/koalab
 
+# add backup service
+  mongodb_backup:
+    image: requilence/mongodb-backup
+    environment:
+      - MONGODB_HOST=mongo_mongodb1
+      - MONGODB_PORT=27017
+      - CRON_TIME=20 3 * * * # Change to your favorate cron job schedule
+      - MAX_BACKUPS=10
+      - INIT_BACKUP=yes
+    networks:
+        - mongonet
+    volumes:
+      - backup:/backup # Change to the host folder where you want to store the backups
+
 networks:
   mongonet: {}
 
@@ -94,3 +108,4 @@ volumes:
   mongoconfig2:
   mongodata3:
   mongoconfig3:
+  backup:
