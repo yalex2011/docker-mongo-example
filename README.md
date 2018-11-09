@@ -1,3 +1,14 @@
+### Схема кластера
+
+![https://docs.mongodb.com/manual/_images/replica-set-read-write-operations-primary.bakedsvg.svg](https://docs.mongodb.com/manual/_images/replica-set-read-write-operations-primary.bakedsvg.svg)
+
+![https://docs.mongodb.com/manual/_images/replica-set-primary-with-two-secondaries.bakedsvg.svg](https://docs.mongodb.com/manual/_images/replica-set-primary-with-two-secondaries.bakedsvg.svg)
+
+![https://docs.mongodb.com/manual/_images/replica-set-trigger-election.bakedsvg.svg](https://docs.mongodb.com/manual/_images/replica-set-trigger-election.bakedsvg.svg)
+
+_Сдохший мастер возврошается в кластер слейвом._
+
+
 ### Разворачиваем mongodb кластер в docker swarm
 
 `docker stack deploy -c mongo-deploy.yml mongo`
@@ -5,7 +16,9 @@
 для запуска сценария развертывания и проверки работы кластера, выполните:
 `./command.sh` - он выполнит выше указанную команду и еще кучу других :)
 
-Для наглядности работы развернут koalb сервер
+Для наглядности работы развернут koalab сервер
+
+![https://raw.githubusercontent.com/AF83/koalab/master/public/screenshots/board.png](https://raw.githubusercontent.com/AF83/koalab/master/public/screenshots/board.png)
 
 http://localhost:8080
 или
